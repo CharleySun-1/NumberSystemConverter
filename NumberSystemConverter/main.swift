@@ -122,5 +122,51 @@ func getDecimalEquivalent(of value: String, from numberSystem: NumberSystemBase)
 let decimalValue = getDecimalEquivalent(of: value, from: startBase)
 print(decimalValue)
 
-// OUTPUT
 
+func getRepresentation(of valueToConvert: Int, inBase base: NumberSystemBase) -> String {
+
+    var decimalValueLeftToConvert = valueToConvert
+    var representation = ""
+    while decimalValueLeftToConvert > 0 {
+
+        // Get next digit, divide by the raw value of the enumeration
+        let nextDigit = decimalValueLeftToConvert % base.rawValue
+
+        // Add to the representation, working from right to left
+        if base == .hexadecimal {
+
+            // Set next digit
+            switch nextDigit {
+            case 0...9:
+                representation = String(nextDigit) + representation
+            case 10:
+                representation = "A" + representation
+            case 11:
+                representation = "B" + representation
+            case 12:
+                representation = "C" + representation
+            case 13:
+                representation = "D" + representation
+            case 14:
+                representation = "E" + representation
+            case 15:
+                representation = "F" + representation
+            default:
+                break
+            }
+
+        } else {
+            representation = String(nextDigit) + representation
+        }
+
+        // Get decimal value still needing conversion
+        decimalValueLeftToConvert = decimalValueLeftToConvert / base.rawValue
+
+    }
+
+    return representation
+
+}
+
+// OUTPUT
+let result = getRepresentation(of: Int(decimalValue), inBase: .binary) 
