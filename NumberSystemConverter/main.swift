@@ -19,7 +19,7 @@ print("Enter your choice (B/O/D/H):", terminator: "") // Keep following output
                                                       // On the same line
 let from = readLine()!
 
-var startBase = Int()
+var startBase = NumberSystemBase.binary
 var toBase = Int()
 
 enum NumberSystemBase: Int {
@@ -28,6 +28,9 @@ enum NumberSystemBase: Int {
     case decimal = 10
     case hexadecimal = 16
 }
+
+print("Please enter the value that you want to convert.")
+let value = readLine()!
 
 
 // Get the "to" number system
@@ -39,56 +42,85 @@ print("H: Hexadecimal")
 print("Enter your choice (B/O/D/H):", terminator: "")
 let to = readLine()!
 
+
 switch from {
 case "B":
-    startBase = 2
+    startBase = .binary
 case "O":
-    startBase = 8
+    startBase = .octal
 case "D":
-    startBase = 10
+    startBase = .decimal
 case "H":
-    startBase = 12
+    startBase = .hexadecimal
 default:
     print("Please enter a number system from above.")
 
 
 }
 // PROCESS
-print(from)
-func decimalEquivalent4(value4:String) -> Double{
-    // HEXDECIMAL TO DECIMAL
-    // Base 16 to Base 10
-    //
-
+func getDecimalEquivalent(of value: String, from numberSystem: NumberSystemBase) -> Double {
     
-    let base = 16.0
-    var exponent = 0.0
-    var decimalEquivalent4 = 0.0
-
-    for character in value4.reversed() {
-        
-        switch character{
-        case "A":
-            decimalEquivalent4 += 10 * pow(base, exponent)
-        case "B":
-            decimalEquivalent4 += 11 * pow(base, exponent)
-        case "C":
-            decimalEquivalent4 += 12 * pow(base, exponent)
-        case "D":
-            decimalEquivalent4 += 13 * pow(base, exponent)
-        case "E":
-            decimalEquivalent4 += 14 * pow(base, exponent)
-        case "F":
-            decimalEquivalent4 += 15 * pow(base, exponent)
-        default:
-            let digit4 = Double(String(character))!
-            decimalEquivalent4 += digit4 * pow(base, exponent)
-        }
-exponent += 1
-
+    // We are converting from what base?
+    var base = 0.0
+    switch numberSystem {
+    case .binary:
+        base = 2.0
+    case .octal:
+        base = 8.0
+    case .decimal:
+        base = 10.0
+    case .hexadecimal:
+        base = 16.0
     }
-    return(decimalEquivalent4)
+
+    // The exponent value at the rightmost digit
+    var exponent = 0.0
+
+    // The current sum in decimal
+    var decimalEquivalent = 0.0
+
+    // Iterate over each character
+    for character in value.reversed() {
+        
+        // Get the current digit as a Double (decimal)
+        if let digit = Double(String(character)) {
+            
+            // Add the current sum
+            decimalEquivalent += digit * pow(base, exponent)
+            
+        } else {
+            
+            // If the conversion to a Double failed, it must be a character like A, B, D, E, or F.
+            switch character {
+            case "A":
+                decimalEquivalent += 10.0 * pow(base, exponent)
+            case "B":
+                decimalEquivalent += 11.0 * pow(base, exponent)
+            case "C":
+                decimalEquivalent += 12.0 * pow(base, exponent)
+            case "D":
+                decimalEquivalent += 13.0 * pow(base, exponent)
+            case "E":
+                decimalEquivalent += 14.0 * pow(base, exponent)
+            case "F":
+                decimalEquivalent += 15.0 * pow(base, exponent)
+            default:
+                break
+            }
+            
+        }
+        
+        // Increment the exponent (+1)
+        exponent += 1
+        
+    }
+
+    return decimalEquivalent
+
 }
+
+let decimalValue = getDecimalEquivalent(of: value, from: startBase)
+print(decimalValue)
 
 // OUTPUT
 
